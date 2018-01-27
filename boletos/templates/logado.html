@@ -1,0 +1,74 @@
+{% extends "index.html" %}
+{% block navbar %}
+    <nav class="navbar navbar-light bg-faded -align-justify">
+        {% load static %}
+        <img class="img-200-200" src="{% static "images\logo1.png"%}" alt="Imagem"/>
+        <button type="button" class="btn btn-outline-primary btn-sm"> <a href="/login/">Sair</a> </button>
+    </nav>
+{% endblock %}
+{% block body %}
+    <table class="table table-light" >
+        <tr> <th>{{ nome }} </th></tr>
+    </table>
+    <table class="table table-light" style="border-radius: 10px;">
+        {% if lista %}
+            <thead class="table-dark">
+                <tr>
+                    <th>Vencimento</th>
+                    <th>Valor</th>
+                    <th class="table-responsive">Status</th>
+                    <th class="table-responsive">Imprimir</th>
+                </tr>
+            </thead>
+            {% for i in lista %}
+                <tbody class="table-hover">
+                    <tr class="btn-outline-light" style=" color: #6c757d" >
+                    {% for j in i %}
+                        {% if j == valor %}
+                            <th> {{ j }}</th>
+                        {% else %}
+                            {% if j == 'V' %}
+                                <th class="table-responsive"> Pago </th>
+                            {% else %}
+                                {% if j == 'F' %}
+                                    <th class="table-responsive"> Aberto</th>
+                                {% else %}
+                                    {% if j >= minimo and j <=  maximo%}
+                                        <th class="table-responsive"> <button onclick="Boleto({{ j }})" type="button" class="btn btn-primary btn-sm">Imprimir </button> </th>
+                                    {% else %}
+                                        <th>{{ j }}</th>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                </tbody>
+            {% endfor %}
+            {% else %}
+                <thead class="table-dark">
+                    <tr>
+                        <td >Aviso</td>
+                    </tr>
+                </thead>
+                <tbody class="table-hover">
+                    <tr class="btn-outline-light" style=" color: #6c757d">
+                    <th> Nao ha boletos no momento.</th>
+                    </tr>
+                </tbody>
+        {% endif %}
+
+
+    </table>
+
+    <script language="Javascript">
+    function Boleto(i) {
+        window.open("https://sgp.contilnet.net/Contratos_Ativos_Boleto_Imprimir?CobrancaID=" + i);
+    }
+    function Sair() {
+        window.open("http://localhost:8000/login/");
+    }
+
+
+    </script>
+{% endblock %}
